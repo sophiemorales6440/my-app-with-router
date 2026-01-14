@@ -7,6 +7,8 @@ import App from "./App";
 
 import About from "./pages/About";
 import Article from "./pages/Article";
+import Home from "./pages/Home";
+
 
 
 const allData = [
@@ -39,7 +41,10 @@ const router = createBrowserRouter([
   {
     element: <App />,
     children: [
-      // ...
+     {
+        index: true, // This handles the "/" path
+        element: <Home />,
+      }, // ...
       {
         path: "/articles/:id",
         element: <Article />,
