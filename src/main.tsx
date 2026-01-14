@@ -1,41 +1,63 @@
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, Link, RouterProvider } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
+
+import App from "./App";
 
 // page components
 
-import Home from "./pages/Home";
 import About from "./pages/About";
+import Article from "./pages/Article";
+
+
+const allData = [
+  {
+    id: 1,
+    title: "Lorem Ipsum",
+    content: "Lorem ipsum dolor sit amet",
+  },
+  {
+    id: 2,
+    title: "Schnapsum",
+    content: "Lorem Elsass ipsum Salut bisamme",
+  },
+  {
+    id: 3,
+    title: "Cupcake Ipsum",
+    content: "Tiramisu pastry wafer brownie soufflé",
+  },
+];
+
+type Data = typeof allData[0];
+
+const getSomeData = (id: number) => {
+  return allData.find((article) => article.id === id) as Data | null;
+};
 
 // router creation
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-        <main>
-          <Home />
-        </main>
-      </>
-    ),
-  },
-  {
-    path: "/about",
-    element: (
-      <>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-        <main>
-          <About />
-        </main>
-      </>
-    ),
+    element: <App />,
+    children: [
+      // ...
+      {
+        path: "/articles/:id",
+        element: <Article />,
+        loader: ({ params }) => {
+          const idAsInt = parseInt(params.id ?? "0");
+
+          return getSomeData(idAsInt);
+        },
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/articles/:id",
+        element: <Article />,
+      },
+    ],
   },
 ]);
 
